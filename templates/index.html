@@ -1,44 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<p>The highest prime number discovered so far is: <output id="result"></output></p>
-<!--
-<button onclick="sayHI()">Say HI</button>
-<button onclick="unknownCmd()">Send unknown command</button>
-<button onclick="stop()">Stop worker</button>
-<output id="result"></output>
--->
-<script>
-    /*
-  function sayHI() {
-    worker.postMessage({'cmd': 'start', 'msg': 'Hi'});
-  }
+<!--<p>The highest prime number discovered so far is: <output id="result"></output></p>
 
-  function stop() {
-    // Calling worker.terminate() from this script would also stop the worker.
-    worker.postMessage({'cmd': 'stop', 'msg': 'Bye'});
-  }
+<!--<script>
 
-  function unknownCmd() {
-    worker.postMessage({'cmd': 'foobard', 'msg': '???'});
-  }
-
-  var worker = new Worker('worker.js');
-
-  worker.addEventListener('message', function(e) {
-    document.getElementById('result').textContent = e.data;
-  }, false);
-*/
    var worker = new Worker('worker.js');
    worker.onmessage = function (event) {
      document.getElementById('result').textContent = event.data;
-   };
-</script>
+   };*/
+
+</script>-->
+<!--
 <script src="{{ url_for('static', filename='worker.js') }}"></script>
-<script src="worker.js"></script>
-</body>
-</html>
+-->
+<!--<script src="worker.js"></script>-->
+<!--
+</html>-->
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+<script type="text/javascript">
+  $(function() {
+    var submit_form = function(e) {
+      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+
+        a: $('input[name="a"]').val(),
+        b: $('input[name="b"]').val()
+      }, function(data) {
+        $('#result').text(data.result);
+        $('input[name=a]').focus().select();
+      });
+      return false;
+    };
+    $('a#calculate').bind('click', submit_form);
+    $('input[type=text]').bind('keydown', function(e) {
+      if (e.keyCode == 13) {
+        submit_form(e);
+      }
+    });
+    $('input[name=a]').focus();
+  });
+</script>
+<h1>jQuery Example</h1>
+<p>
+  <input type="text" size="5" name="a"> +
+  <input type="text" size="5" name="b"> =
+  <span id="result">?</span>
+<p><a href=# id="calculate">calculate server side</a>
+{% endblock %}

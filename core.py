@@ -1,69 +1,21 @@
 
-import time
-from datetime import datetime
-from redis import Redis
-from flask import Flask, render_template, Response, request, redirect
+from flask import Flask, jsonify, render_template, request
+app = Flask(__name__)
 
 
-redis = Redis()
+@app.route('/_add_numbers')
+def add_numbers():
+    """Add two numbers server side, ridiculous but well..."""
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    print a + b + 100
 
-app = Flask(__name__, static_url_path='')
-'''
-ONLINE_LAST_MINUTES = 5
+    return jsonify(result=a + b + 100)
 
-
-def mark_online(user_id):
-
-    now = int(time.time())
-    expires = now + (app.config['ONLINE_LAST_MINUTES'] * 60) + 10
-    all_users_key = 'online-users/%d' % (now // 60)
-    user_key = 'user-activity/%s' % user_id
-    p = redis.pipeline()
-    p.sadd(all_users_key, user_id)
-    p.set(user_key, now)
-    p.expireat(all_users_key, expires)
-    p.expireat(user_key, expires)
-    p.execute()
-
-
-def get_user_last_activity(user_id):
-    last_active = redis.get('user-activity/%s' % user_id)
-    if last_active is None:
-        return None
-    return datetime.utcfromtimestamp(int(last_active))
-
-
-def get_online_users():
-    current = int(time.time()) // 60
-    minutes = xrange(app.config['ONLINE_LAST_MINUTES'])
-    return redis.sunion(['online-users/%d' % (current - x)
-                        for x in minutes])
-
-
-
-@app.before_request
-def mark_current_user_online():
-    mark_online(request.remote_addr)
-
-
-@app.route('/online')
-def online():
-    mark_online(request.remote_addr)
-    return Response('Online: %s' % ', '.join(get_online_users()),
-                    mimetype='text/plain')
-'''
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-
-
-
-
-
-
 
 
 
