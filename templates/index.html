@@ -9,7 +9,7 @@
 
 </script>-->
 <!--
-<script src="{{ url_for('static', filename='worker.js') }}"></script>
+
 -->
 <!--<script src="worker.js"></script>-->
 <!--
@@ -19,6 +19,7 @@
 
 {% extends "layout.html" %}
 {% block body %}
+<!--
 <script type="text/javascript">
   $(function() {
     var submit_form = function(e) {
@@ -32,7 +33,9 @@
       });
       return false;
     };
+
     $('a#calculate').bind('click', submit_form);
+
     $('input[type=text]').bind('keydown', function(e) {
       if (e.keyCode == 13) {
         submit_form(e);
@@ -41,10 +44,28 @@
     $('input[name=a]').focus();
   });
 </script>
+-->
+
+<!--
 <h1>jQuery Example</h1>
 <p>
   <input type="text" size="5" name="a"> +
   <input type="text" size="5" name="b"> =
   <span id="result">?</span>
 <p><a href=# id="calculate">calculate server side</a>
+-->
+
+
+
+
+<p>The highest prime number discovered so far is: <output id="resultw"></output></p>
+
+<script>
+   var worker = new Worker('worker.js');
+   worker.postMessage(15000000);
+   worker.onmessage = function (event) {
+     document.getElementById('resultw').textContent = event.data;
+   };
+</script>
+
 {% endblock %}
