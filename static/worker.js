@@ -7,5 +7,6 @@ self.addEventListener('message', function(e) {
          continue search;
       // found a prime!
       self.postMessage(n);
+        break;
     }
 }, false);
