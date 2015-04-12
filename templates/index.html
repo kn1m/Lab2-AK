@@ -5,31 +5,64 @@ $(function() {
     var submit_form = function(e) {
       $.getJSON($SCRIPT_ROOT + '/calculate_current', {
       }, function(data) {
-            $('#result').text(data.result);
+          //marks user online
+            $.ajax({
+                    url: '/mark_online',
+                    type: 'POST',
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+
+            $('#result').text(data.first_border);
             var worker = new Worker('worker.js');
-            worker.postMessage(data.result);
+            worker.postMessage([data.first_border, data.second_border]);
+
             worker.onmessage = function (event) {
-                //document.getElementById('result_worker').textContent = event.data;
                 $('#result_worker').text(event.data);
+
+                if(event.data == 0)
+                {
+                    $.ajax({
+                        url: '/watch_worker',
+                        data: JSON.stringify(event.data),
+                        contentType: 'application/json;charset=UTF-8',
+                        type: 'POST',
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    })
+                }
+                //sends result data to server
                 $.ajax({
                     url: '/print',
                     data: JSON.stringify(event.data),
                     contentType: 'application/json;charset=UTF-8',
                     type: 'POST',
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response);
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.log(error);
                     }
-                });
+                })
             };
+
+
         });
         return false;
     };
     $('a#calculate').bind('click', submit_form);
 });
 </script>
+
 <p><a href=# id="calculate">Get data to check it for being prime</a>
 <p>Result: <output id="result_worker"></output></p>
+<p><a href="/online">View online clients number</a></p>
 {% endblock %}
