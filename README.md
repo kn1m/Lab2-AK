@@ -9,6 +9,7 @@ FILE
     /home/m3sc4/Study/AK/Lab2-AK/core.py
 
 FUNCTIONS
+
     calculate()
         Return current data for calculation(borders of calculation for client).
     
@@ -31,6 +32,7 @@ FUNCTIONS
         Watch current worker state.
 
 DATA
+
     Check = ''
     ComputationTime = 0
     CurrentData = ''
@@ -41,7 +43,8 @@ DATA
     isFinished = False
     request = <LocalProxy unbound>
     
-    Requirements: 
-      jquery 1.4.2
-      big-integer.js (edge)
+REQUIREMENTS
+
+    jquery 1.4.2
+    big-integer.js (edge)
     
