@@ -1,14 +1,16 @@
+importScripts('BigInteger.min.js');
 self.addEventListener('message', function(e) {
-    var n = e.data[0];
-    search: while (true) {
-      n += 1;
-        if( n <= e.data[1]) {
-            for (var i = 2; i <= Math.sqrt(n); i += 1)
-                if (n % i == 0)
-                    continue search;
-            self.postMessage(n);
-            break;
+    var first = bigInt(e.data[0]);
+    var second = bigInt(e.data[1]);
+    var Flag = false;
+    while(!Flag && bigInt(first).compare(second) == -1) {
+        if(first.isPrime()) {
+            self.postMessage(first.toString());
+            Flag = true;
         }
+        first = first.add(1);
+    }
+    if(!Flag) {
         self.postMessage(0);
     }
 }, false);
