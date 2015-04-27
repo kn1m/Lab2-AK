@@ -63,12 +63,14 @@ def users_online():
 def watch_worker():
     """Watch current worker state."""
     received_data = request.json
-    global CurrentData, isFinished, ComputationTime, Check, FirstPrime
+    global CurrentData, isFinished, ComputationTime, Check, FirstPrime, UsersOnline
+    data_control = UsersOnline
     if isFinished:
         return jsonify(first_border='-1', second_border='-1')
     if received_data == 0:
         print 'AJAX POST current computation data on worker: ', CurrentData
-        CurrentData = str(int(CurrentData) + 5)
+        if data_control == UsersOnline:
+            CurrentData = str(int(CurrentData) + 5)
         print 'AJAX POST new current computation data send: ', CurrentData
     else:
         isFinished = True
@@ -99,5 +101,15 @@ def mark_online():
     return jsonify(result=user_id)
 
 
+@app.route('/mark_offline', methods=['POST'])
+def mark_offline():
+    """Marks client offline."""
+    user_id = request.remote_addr
+    global UsersOnline
+    if UsersOnline != 0:
+        UsersOnline -= 1
+        print 'AJAX POST client gone offline: ', user_id
+    return jsonify(result=user_id)
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')  # making server visible across local network for tests
+    app.run(host='0.0.0.0')  # making server visible across local network for test purposes

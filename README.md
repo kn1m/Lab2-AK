@@ -21,6 +21,9 @@ FUNCTIONS
     
     mark_online()
         Marks client online.
+
+    mark_offline()
+        Marks client online.
     
     online()
         Returns number of online clients.
