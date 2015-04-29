@@ -11,6 +11,7 @@ CurrentData = ''
 isFinished = False
 isBegin = True
 Check = ''
+InputData = ''
 
 
 def generate_number(n):
@@ -26,10 +27,21 @@ def generate_number(n):
 def calculate():
     """Return current data for calculation(borders of calculation for client)."""
     print 'AJAX getJSON request to get current data and begin compute on new client'
-    global isBegin, Check, CurrentData, isFinished, ComputationTime
+    global isBegin, Check, CurrentData, isFinished, ComputationTime, InputData
     if isBegin:
         ComputationTime = time.time()
-        first = generate_number(200)
+        if InputData != '':
+            first = InputData
+        else:
+            first = '361051291061351691361876416032541453911180103658317316517217419117' \
+                    '750701391621261545813027113241831669511710714298818161869171822812' \
+                    '148179184189140571671551318819716419114243151199861926112127871571' \
+                    '759818536242711861198047109971109013113810510415694731416810814815' \
+                    '891255632119814452118448117035771411284111941021001851616613414712' \
+                    '341156019585178461496722146122101123769172238429684116384045756378' \
+                    '499937133163593015296741111619331339351190153150137252071245517182' \
+                    '1592613201439217619679158120'
+            # first = generate_number(200)
         Check = first
         print 'First number send: ', first
         second = str(int(first) + 5)
@@ -110,6 +122,32 @@ def mark_offline():
         UsersOnline -= 1
         print 'AJAX POST client gone offline: ', user_id
     return jsonify(result=user_id)
+
+
+@app.route('/input_custom_data')
+def custom_data():
+    return render_template('input_custom_data.html')
+
+
+@app.route('/custom_data')
+def custom_data_try():
+    data = request.args.get('a', 0, type=str)
+    global InputData
+    try:
+        data_test = int(data)
+    except ValueError:
+        print 'Value Error: input data is not integer.'
+        return jsonify(result=0)
+    InputData = str(data_test)
+    print 'Custom data input: ', InputData
+    return jsonify(result=InputData)
+
+
+@app.route('/get_p')
+def get_p():
+    global FirstPrime
+    return jsonify(result=FirstPrime)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')  # making server visible across local network for test purposes
