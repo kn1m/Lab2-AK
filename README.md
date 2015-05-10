@@ -34,18 +34,6 @@ FUNCTIONS
     watch_worker()
         Watch current worker state.
 
-DATA
-
-    Check = ''
-    ComputationTime = 0
-    CurrentData = ''
-    FirstPrime = 0
-    UsersOnline = 0
-    app = <Flask 'core'>
-    isBegin = True
-    isFinished = False
-    request = <LocalProxy unbound>
-    
 REQUIREMENTS
 
     jquery 1.4.2
