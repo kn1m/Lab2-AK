@@ -76,13 +76,11 @@ def watch_worker():
     """Watch current worker state."""
     received_data = request.json
     global CurrentData, isFinished, ComputationTime, Check, FirstPrime, UsersOnline
-    data_control = UsersOnline
     if isFinished:
         return jsonify(first_border='-1', second_border='-1')
     if received_data == 0:
         print 'AJAX POST current computation data on worker: ', CurrentData
-        if data_control == UsersOnline:
-            CurrentData = str(int(CurrentData) + 5)
+        CurrentData = str(int(CurrentData) + 5)
         print 'AJAX POST new current computation data send: ', CurrentData
     else:
         isFinished = True
